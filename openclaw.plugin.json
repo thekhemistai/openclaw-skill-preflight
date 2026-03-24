@@ -31,7 +31,7 @@
       },
       "maxDocLines": {
         "type": "number",
-        "description": "Truncate injected docs to this many lines (default: 0 = no limit)"
+        "description": "Truncate injected docs to this many lines (default: 100 for token burn mitigation)"
       },
       "ollamaBaseUrl": {
         "type": "string",

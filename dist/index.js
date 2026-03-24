@@ -13,7 +13,7 @@ const DEFAULT_OLLAMA_BASE_URL = "http://localhost:11434";
 const DEFAULT_EMBED_MODEL = "nomic-embed-text:latest";
 const DEFAULT_REQUEST_TIMEOUT_MS = 10_000;
 const DEFAULT_MIN_SCORE = 0.3;
-const DEFAULT_MAX_DOC_LINES = 0; // 0 = no limit
+const DEFAULT_MAX_DOC_LINES = 100; // token burn mitigation
 const DOC_CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
 const MAX_SESSION_CACHE = 100;
 
@@ -259,11 +259,13 @@ function docEmbedInput(doc) {
     .replace(/\[\[.*?\]\]/g, "")
     .trim()
     .slice(0, 800);
-  return `${doc.title}: ${doc.description || ""} ${body}`.trim();
+  const input = `${doc.title}: ${doc.description || ""} ${body}`.trim();
+  return `search_document: ${input}`;
 }
 
 async function rankDocs(prompt, docs, cfg, logger) {
-  const promptEmbedding = await embedText(prompt.slice(0, 1000), cfg);
+  const promptWithPrefix = `search_query: ${prompt.slice(0, 1000)}`;
+  const promptEmbedding = await embedText(promptWithPrefix, cfg);
   if (!promptEmbedding) {
     logger?.warn?.("skill-preflight: ollama embedding unavailable, falling back to first N docs");
     return docs.slice(0, cfg.maxResults);
