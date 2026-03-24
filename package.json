@@ -1,0 +1,38 @@
+{
+  "name": "openclaw-plugin-skill-preflight",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Injects relevant skills and protocols into OpenClaw agent context using local embeddings (nomic-embed-text). Free, no API calls.",
+  "main": "dist/index.js",
+  "openclaw": {
+    "extensions": [
+      "./dist/index.js"
+    ]
+  },
+  "files": [
+    "dist",
+    "openclaw.plugin.json",
+    "README.md",
+    "SKILL.md"
+  ],
+  "keywords": [
+    "openclaw",
+    "plugin",
+    "rag",
+    "skills",
+    "embeddings",
+    "nomic-embed-text",
+    "ollama",
+    "agent"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/openclaw/extensions"
+  },
+  "homepage": "https://clawhub.ai",
+  "author": "Chemdawg"
+}
