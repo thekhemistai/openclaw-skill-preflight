@@ -1,6 +1,6 @@
 {
   "name": "@thekhemistai/skill-preflight",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "Injects relevant skills and protocols into OpenClaw agent context using local embeddings (nomic-embed-text). Free, no API calls.",
   "main": "dist/index.js",

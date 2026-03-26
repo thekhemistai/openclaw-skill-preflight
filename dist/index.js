@@ -343,6 +343,14 @@ const skillPreflightPlugin = {
     });
 
     api.on("before_prompt_build", async (event, ctx) => {
+      // Only run preflight on user-initiated prompts — skip heartbeats, crons,
+      // overflow, and other internal triggers to avoid wasting tokens.
+      const trigger = ctx?.trigger;
+      if (trigger && trigger !== "user") {
+        api.logger.debug?.(`skill-preflight: skipping non-user trigger "${trigger}"`);
+        return;
+      }
+
       const prompt = event.prompt || "";
       if (prompt.length < cfg.minPromptLength) return;
 
