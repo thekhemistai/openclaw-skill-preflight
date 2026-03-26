@@ -35,7 +35,7 @@
       },
       "ollamaBaseUrl": {
         "type": "string",
-        "description": "Ollama base URL for embeddings (default: http://localhost:11434)"
+        "description": "Ollama base URL for embeddings (default: http://localhost:11434). Keep this local (localhost/127.0.0.1/::1) if you want prompt text and indexed docs to stay on the same machine; a remote URL sends that text to the remote host."
       },
       "embedModel": {
         "type": "string",

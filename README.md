@@ -1,6 +1,6 @@
 # openclaw-plugin-skill-preflight
 
-An [OpenClaw](https://openclaw.ai) plugin that automatically injects relevant skills and protocols into agent context before each run — using local embeddings. Free. No API calls.
+An [OpenClaw](https://openclaw.ai) plugin that automatically injects relevant skills and protocols into agent context before each run — using Ollama embeddings. Free. No separate embedding API required.
 
 ## How it works
 
@@ -52,7 +52,7 @@ Then register in your `openclaw.json`:
 | `maxDocLines` | `0` | Truncate injected docs to N lines (0 = no limit) |
 | `minScore` | `0.3` | Cosine similarity threshold — tune via debug logs |
 | `embedModel` | `nomic-embed-text:latest` | Ollama model for embeddings |
-| `ollamaBaseUrl` | `http://localhost:11434` | Ollama API base URL |
+| `ollamaBaseUrl` | `http://localhost:11434` | Ollama API base URL. Keep this local (`localhost`, `127.0.0.1`, `::1`) if you want prompts and indexed docs to stay on the same machine. A remote host will receive that text for embedding. |
 | `requestTimeoutMs` | `10000` | Timeout for embedding calls |
 
 ## Pinned docs
@@ -76,6 +76,10 @@ skill-preflight: scores — DebuggingProtocol(0.72), EthereumSkill(0.51), Memory
 ```
 
 Use this to dial in your threshold.
+
+## Privacy note
+
+This plugin is local-only **when your configured `ollamaBaseUrl` is local**. If you change it to a remote URL, the plugin will POST prompt text and indexed markdown content to that remote Ollama host for embeddings. Treat that as a trust-boundary change, not a cosmetic config tweak.
 
 ## License
 

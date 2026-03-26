@@ -14,7 +14,7 @@ license: MIT
 
 # Skill Preflight
 
-A smart plugin for OpenClaw that automatically injects the most relevant skills and protocols into your agent's context before each run. Uses local embeddings via Ollama — free, offline-capable, no API keys.
+A smart plugin for OpenClaw that automatically injects the most relevant skills and protocols into your agent's context before each run. Uses Ollama embeddings — free, offline-capable, no separate embedding API key required.
 
 ## What It Does
 
@@ -92,7 +92,7 @@ Create your skills and protocols in:
 | `maxDocLines` | `0` | Truncate injected docs to N lines (0 = no limit) |
 | `minScore` | `0.3` | Cosine similarity threshold (0–1). Lower = more permissive. Tune via debug logs. |
 | `embedModel` | `nomic-embed-text:latest` | Ollama embedding model |
-| `ollamaBaseUrl` | `http://localhost:11434` | Ollama API base URL (change if running on different host/port) |
+| `ollamaBaseUrl` | `http://localhost:11434` | Ollama API base URL. For local-only privacy, keep this on `localhost`, `127.0.0.1`, or `::1`. If you point it at a remote host, prompt text and indexed doc content are sent to that host for embeddings. |
 | `requestTimeoutMs` | `10000` | Timeout for embedding requests (ms) |
 | `minPromptLength` | `20` | Minimum prompt length to trigger preflight. Short prompts skip embedding. |
 
@@ -180,9 +180,10 @@ Frontmatter is optional. If not provided, the first heading or filename is used 
 
 ## Privacy & Performance
 
-- **No external API calls** — embeddings happen locally via Ollama
-- **No data leaves your machine** — all processing is local
-- **Offline capable** — once Ollama model is downloaded, no internet required
+- **No separate embedding API required** — embeddings go through your configured Ollama endpoint
+- **Local-only when Ollama is local** — keep `ollamaBaseUrl` on `localhost`, `127.0.0.1`, or `::1` if you want docs and prompts to stay on the same machine
+- **Remote Ollama changes the trust boundary** — if `ollamaBaseUrl` points to another host, prompt text and indexed doc content are sent there for embedding
+- **Offline capable** — once the Ollama model is downloaded and running locally, no internet is required
 - **Caching:** Docs cached for 1 hour, embeddings cached in memory per session
 - **Session-aware:** Same doc won't be re-injected in a single conversation
 

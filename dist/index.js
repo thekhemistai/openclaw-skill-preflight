@@ -50,6 +50,16 @@ function resolveConfig(rawConfig) {
   };
 }
 
+function isLocalOllamaBaseUrl(value) {
+  if (!value || typeof value !== "string") return false;
+  try {
+    const url = new URL(value);
+    return ["localhost", "127.0.0.1", "::1"].includes(url.hostname);
+  } catch {
+    return false;
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Doc extraction — title + description from markdown
 // ---------------------------------------------------------------------------
@@ -319,7 +329,7 @@ const skillPreflightPlugin = {
   id: "skill-preflight",
   name: "Skill Preflight",
   description:
-    "Injects relevant skills and protocols into agent context using local embeddings (nomic-embed-text). Free, no API calls. Supports pinned docs, recursive scanning, and session deduplication.",
+    "Injects relevant skills and protocols into agent context using Ollama embeddings (nomic-embed-text). No external embedding API is required when Ollama is local. Supports pinned docs, recursive scanning, and session deduplication.",
 
   register(api) {
     const cfg = resolveConfig(api.pluginConfig);
@@ -339,6 +349,11 @@ const skillPreflightPlugin = {
         api.logger.info?.(
           `skill-preflight: ready (embed=${cfg.embedModel}, maxResults=${cfg.maxResults}, minScore=${cfg.minScore}, maxDocLines=${cfg.maxDocLines || "unlimited"}, pinned=${cfg.pinnedDocs.length})`
         );
+        if (!isLocalOllamaBaseUrl(cfg.ollamaBaseUrl)) {
+          api.logger.warn?.(
+            `skill-preflight: ollamaBaseUrl is non-local (${cfg.ollamaBaseUrl}). Prompt text and indexed doc content will be sent to that host for embeddings. Use localhost/127.0.0.1/[::1] if you want local-only processing.`
+          );
+        }
       },
     });
 
