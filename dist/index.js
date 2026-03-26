@@ -17,13 +17,12 @@ const DEFAULT_MAX_DOC_LINES = 100; // token burn mitigation
 const DOC_CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
 const MAX_SESSION_CACHE = 100;
 
-// Files to skip — meta/audit docs that aren't actionable skills
-const SKIP_FILENAMES = [
-  "SKILL-GOLD-STANDARD.md",
-  "PROTOCOLS-HUB.md",
-  "skills-audit",
-  "gigabrain-eval",
-  "mnemo-audit",
+// Files to skip — generic meta/audit/eval docs that usually aren't actionable runtime skills
+const SKIP_FILENAME_PATTERNS = [
+  /(^|[-_.])audit([-_.]|$)/i,
+  /(^|[-_.])eval(uation)?([-_.]|$)/i,
+  /(^|[-_.])gold[-_.]?standard([-_.]|$)/i,
+  /^protocols[-_.]hub\.md$/i,
 ];
 
 // ---------------------------------------------------------------------------
@@ -102,7 +101,7 @@ function extractDocMeta(content, relPath) {
 }
 
 function shouldSkip(filename) {
-  return SKIP_FILENAMES.some((s) => filename.includes(s));
+  return SKIP_FILENAME_PATTERNS.some((pattern) => pattern.test(filename));
 }
 
 function isDeprecated(status) {
