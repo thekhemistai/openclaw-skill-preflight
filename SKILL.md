@@ -89,7 +89,7 @@ Create your skills and protocols in:
 | `toolsFiles` | `["TOOLS.md"]` | Individual files to always include in the index |
 | `pinnedDocs` | `[]` | Docs always injected first, regardless of score |
 | `maxResults` | `3` | Max ranked docs to inject per run (pinned docs don't count toward this) |
-| `maxDocLines` | `0` | Truncate injected docs to N lines (0 = no limit) |
+| `maxDocLines` | `100` | Truncate injected docs to N lines (0 = no limit) |
 | `minScore` | `0.3` | Cosine similarity threshold (0–1). Lower = more permissive. Tune via debug logs. |
 | `embedModel` | `nomic-embed-text:latest` | Ollama embedding model |
 | `ollamaBaseUrl` | `http://localhost:11434` | Ollama API base URL. For local-only privacy, keep this on `localhost`, `127.0.0.1`, or `::1`. If you point it at a remote host, prompt text and indexed doc content are sent to that host for embeddings. |
@@ -182,7 +182,10 @@ Frontmatter is optional. If not provided, the first heading or filename is used 
 
 - **No separate embedding API required** — embeddings go through your configured Ollama endpoint
 - **Local-only when Ollama is local** — keep `ollamaBaseUrl` on `localhost`, `127.0.0.1`, or `::1` if you want docs and prompts to stay on the same machine
-- **Remote Ollama changes the trust boundary** — if `ollamaBaseUrl` points to another host, prompt text and indexed doc content are sent there for embedding
+- **Remote Ollama changes the trust boundary** — if `ollamaBaseUrl` points to another host, the following are sent to that host for embedding:
+  - **Prompt text** from every agent run
+  - **Full indexed markdown content** including secrets, API keys, credentials, and all sensitive data in your docs
+  - Any confidential information embedded in your skills, protocols, and tools documentation
 - **Offline capable** — once the Ollama model is downloaded and running locally, no internet is required
 - **Caching:** Docs cached for 1 hour, embeddings cached in memory per session
 - **Session-aware:** Same doc won't be re-injected in a single conversation

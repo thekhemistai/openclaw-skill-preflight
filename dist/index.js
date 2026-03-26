@@ -21,7 +21,6 @@ const MAX_SESSION_CACHE = 100;
 const SKIP_FILENAME_PATTERNS = [
   /(^|[-_.])audit([-_.]|$)/i,
   /(^|[-_.])eval(uation)?([-_.]|$)/i,
-  /(^|[-_.])gold[-_.]?standard([-_.]|$)/i,
   /^protocols[-_.]hub\.md$/i,
 ];
 

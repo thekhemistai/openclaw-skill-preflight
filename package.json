@@ -1,8 +1,8 @@
 {
   "name": "@thekhemistai/skill-preflight",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "type": "module",
-  "description": "Injects relevant skills and protocols into OpenClaw agent context using Ollama embeddings (nomic-embed-text). Local-only when Ollama is local; remote ollamaBaseUrl sends text to that host.",
+  "description": "Injects relevant skills and protocols into OpenClaw agent context using Ollama embeddings (nomic-embed-text). Local-only when Ollama is local; remote ollamaBaseUrl sends prompt text and indexed docs (including secrets) to that host.",
   "main": "dist/index.js",
   "openclaw": {
     "extensions": [

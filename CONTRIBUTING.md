@@ -72,7 +72,7 @@ Open a GitHub issue with:
 
 ## Ideas for Improvement
 
-See [ROADMAP.md](./ROADMAP.md) for planned features. Feel free to discuss ideas in Issues before implementing major changes.
+Have ideas? Feel free to open a [GitHub issue](https://github.com/thekhemistai/openclaw-skill-preflight/issues) to discuss features or improvements before implementing major changes.
 
 ## License
 

@@ -49,7 +49,7 @@ Then register in your `openclaw.json`:
 | `toolsFiles` | `["TOOLS.md"]` | Individual files to always include in the index |
 | `pinnedDocs` | `[]` | Docs always injected regardless of score |
 | `maxResults` | `3` | Max ranked docs to inject per run |
-| `maxDocLines` | `0` | Truncate injected docs to N lines (0 = no limit) |
+| `maxDocLines` | `100` | Truncate injected docs to N lines (0 = no limit) |
 | `minScore` | `0.3` | Cosine similarity threshold — tune via debug logs |
 | `embedModel` | `nomic-embed-text:latest` | Ollama model for embeddings |
 | `ollamaBaseUrl` | `http://localhost:11434` | Ollama API base URL. Keep this local (`localhost`, `127.0.0.1`, `::1`) if you want prompts and indexed docs to stay on the same machine. A remote host will receive that text for embedding. |
@@ -77,9 +77,16 @@ skill-preflight: scores — DebuggingProtocol(0.72), EthereumSkill(0.51), Memory
 
 Use this to dial in your threshold.
 
-## Privacy note
+## Privacy and Trust Boundaries
 
-This plugin is local-only **when your configured `ollamaBaseUrl` is local**. If you change it to a remote URL, the plugin will POST prompt text and indexed markdown content to that remote Ollama host for embeddings. Treat that as a trust-boundary change, not a cosmetic config tweak.
+**This plugin is local-only when `ollamaBaseUrl` is local.** If configured to use a remote Ollama host, the plugin sends:
+
+- **Prompt text** from each agent run
+- **Full indexed markdown content** from your skills, protocols, and tools docs
+
+This includes any secrets, API keys, credentials, or sensitive data embedded in your documentation. If your docs contain passwords, tokens, or confidential information, a remote `ollamaBaseUrl` will transmit that data to the remote host for embeddings.
+
+**Keep `ollamaBaseUrl` on `localhost`, `127.0.0.1`, or `::1`** if you want prompts and docs to stay on the same machine. Changing it to a remote URL is a **trust-boundary change**, not a cosmetic config tweak.
 
 ## License
 
